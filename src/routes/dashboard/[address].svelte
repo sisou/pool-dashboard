@@ -2,9 +2,11 @@
 	<title>Dashboard - NIMIQ.WATCH Pool</title>
 </svelte:head>
 
-<h1>Your stats</h1>
+<h1>Dashboard</h1>
 
-<strong>{ user.address } - { user.id }</strong>
+<p>
+	Your address: <strong>{ user.address }</strong>
+</p>
 
 <table border="1">
 	<thead>
@@ -30,15 +32,19 @@
 	// `{ path, params, query }` object and turns it into
 	// the data we need to render the page
 	export async function preload(page, session) {
-		// the `slug` parameter is available because this file
-		// is called [slug].svelte
-		// const { slug } = page.params;
-		const address = 'NQ91 XLRA QFMR FJU5 KPHL 8TVH 9848 8BU7 7B8S';
+		// the `address` parameter is available because this file
+		// is called [address].svelte
+		const address = page.params.address.replace(/\+/g, ' ');
+		// const address = 'NQ91 XLRA QFMR FJU5 KPHL 8TVH 9848 8BU7 7B8S';
 
 		// `this.fetch` is a wrapper around `fetch` that allows
 		// you to make credentialled requests on both
 		// server and client
 		const user = await this.fetch(`api/user/${address}.json`).then(res => res.json());
+		if (user.error) {
+			this.error(user.error.code, user.error.message);
+			return;
+		}
 		if (!user.id) return { user, devices: [] };
 
 		const devices = await this.fetch(`api/user/${user.id}/devices.json`).then(res => res.json());

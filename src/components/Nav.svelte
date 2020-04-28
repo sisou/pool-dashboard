@@ -1,17 +1,34 @@
 <nav>
 	<ul>
-		<li><a aria-current='{segment === undefined ? "page" : undefined}' href='.'>home</a></li>
-		<li><a aria-current='{segment === "stats" ? "page" : undefined}' href='stats'>stats</a></li>
-		<li><a aria-current='{segment === "dashboard" ? "page" : undefined}' href='dashboard'>dashboard</a></li>
+		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
+		<li><a aria-current="{segment === 'stats' ? 'page' : undefined}" href="stats">Stats</a></li>
+		<li><a aria-current="{segment === 'dashboard' ? 'page' : undefined}" href="{dashboardHref}">Dashboard</a></li>
 
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
 		<!-- <li><a rel=prefetch aria-current='{segment === "blog" ? "page" : undefined}' href='blog'>blog</a></li> -->
+
+		{#if address}
+			<li class="account"><a href="dashboard" on:click="{logout}">Logout</a></li>
+		{:else}
+			<li class="account"><a href="dashboard">Login</a></li>
+		{/if}
 	</ul>
 </nav>
 
 <script>
+	import { stores } from '@sapper/app';
+
 	export let segment;
+
+	const { session } = stores();
+	$: address = $session && $session.address || null;
+	$: dashboardHref = address ? `dashboard/${address.replace(/ /g, '+')}` : 'dashboard';
+
+	function logout() {
+		delete localStorage.address;
+		session.set({});
+	}
 </script>
 
 <style>
@@ -36,6 +53,10 @@
 	li {
 		display: block;
 		float: left;
+	}
+
+	li.account {
+		float: right;
 	}
 
 	[aria-current] {
