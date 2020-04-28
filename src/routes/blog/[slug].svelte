@@ -1,3 +1,13 @@
+<svelte:head>
+	<title>{post.title}</title>
+</svelte:head>
+
+<h1>{post.title}</h1>
+
+<div class='content'>
+	{@html post.html}
+</div>
+
 <script context="module">
 	export async function preload({ params, query }) {
 		// the `slug` parameter is available because
@@ -52,13 +62,3 @@
 		margin: 0 0 0.5em 0;
 	}
 </style>
-
-<svelte:head>
-	<title>{post.title}</title>
-</svelte:head>
-
-<h1>{post.title}</h1>
-
-<div class='content'>
-	{@html post.html}
-</div>
