@@ -14,6 +14,7 @@
 			<th>Device ID</th>
 			<th>Last Block</th>
 			<th>Hashrate</th>
+			<th>Status</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -22,6 +23,11 @@
 				<td>{ device.id }</td>
 				<td>#{ device.last_block }</td>
 				<td>{ formatHashrate(device.hashrate) } kH/s</td>
+				{#if isOnline(device.chain_height, device.last_block)}
+					<td class="online">online</td>
+				{:else}
+					<td class="offline">offline</td>
+				{/if}
 			</tr>
 		{/each}
 	</tbody>
@@ -60,4 +66,18 @@
 		const kiloHash = hashrate / 1000;
 		return Math.round(kiloHash * 10) / 10;
 	}
+
+	function isOnline(chain_height, last_block) {
+		return last_block >= chain_height - 2;
+	}
 </script>
+
+<style>
+	.online {
+		color: green;
+	}
+
+	.offline {
+		color: red;
+	}
+</style>
