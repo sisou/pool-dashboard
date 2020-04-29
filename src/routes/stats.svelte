@@ -7,7 +7,7 @@
 <table>
 	<tbody>
 		<tr>
-			<td>Miners</td>
+			<td>Devices</td>
 			<td>{ pool.device_count }</td>
 		</tr>
 		<tr>
@@ -25,6 +25,31 @@
 	</tbody>
 </table>
 
+<h2>Blocks</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th>Height</th>
+			<th>Time</th>
+			<th>Hash</th>
+			<th>Confirmations Remaining</th>
+			<th>Main Chain</th>
+		</tr>
+	</thead>
+	<tbody>
+		{#each blocks as block}
+			<tr>
+				<td>{ block.height }</td>
+				<td>{ new Date(block.timestamp * 1000).toLocaleString() }</td>
+				<td>{ block.hash }</td>
+				<td>{ block.confirmations_remaining }</td>
+				<td>{ block.main_chain }</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
+
 <script context="module">
 	// the (optional) preload function takes a
 	// `{ path, params, query }` object and turns it into
@@ -33,14 +58,18 @@
 		// `this.fetch` is a wrapper around `fetch` that allows
 		// you to make credentialled requests on both
 		// server and client
-		const pool = await this.fetch(`api/pool.json`).then(res => res.json());
+		const [pool, blocks] = await Promise.all([
+			this.fetch(`api/pool.json`).then(res => res.json()),
+			this.fetch(`api/blocks.json`).then(res => res.json()),
+		]);
 
-		return { pool };
+		return { pool, blocks };
 	}
 </script>
 
 <script>
 	export let pool;
+	export let blocks;
 
 	function formatHashrate(hashrate) {
 		const kiloHash = hashrate / 1000;
