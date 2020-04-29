@@ -8,6 +8,10 @@
 	Your address: <strong>{ user.address }</strong>
 </p>
 
+<p>
+	Confirmed Balance: <strong>{ balance.confirmed / 1e5 } NIM</strong>
+</p>
+
 <table border="1">
 	<thead>
 		<tr>
@@ -51,16 +55,20 @@
 			this.error(user.error.code, user.error.message);
 			return;
 		}
-		if (!user.id) return { user, devices: [] };
+		if (!user.id) return { user, devices: [], balance: { confirmed: 0, unconfirmed: 0 } };
 
-		const devices = await this.fetch(`api/user/${user.id}/devices.json`).then(res => res.json());
-		return { user, devices };
+		const [devices, balance] = await Promise.all([
+			this.fetch(`api/user/${user.id}/devices.json`).then(res => res.json()),
+			this.fetch(`api/user/${user.id}/balance.json`).then(res => res.json()),
+		]);
+		return { user, devices, balance };
 	}
 </script>
 
 <script>
 	export let user;
 	export let devices;
+	export let balance;
 
 	function formatHashrate(hashrate) {
 		const kiloHash = hashrate / 1000;
