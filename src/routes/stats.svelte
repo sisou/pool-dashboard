@@ -7,26 +7,43 @@
 <table>
 	<tbody>
 		<tr>
-			<td>Connected Miners</td>
-			<td>{ connectedMiners }</td>
+			<td>Miners</td>
+			<td>{ pool.device_count }</td>
+		</tr>
+		<tr>
+			<td>Users</td>
+			<td>{ pool.user_count }</td>
 		</tr>
 		<tr>
 			<td>Pool Hashrate</td>
-			<td>{ hashrate } H/s</td>
+			<td>{ formatHashrate(pool.hashrate) } kH/s</td>
 		</tr>
 		<tr>
 			<td>Blocks Mined</td>
-			<td>{ blocksMined }</td>
-		</tr>
-		<tr>
-			<td>Network</td>
-			<td>Mainnet</td>
+			<td>{ pool.block_count }</td>
 		</tr>
 	</tbody>
 </table>
 
+<script context="module">
+	// the (optional) preload function takes a
+	// `{ path, params, query }` object and turns it into
+	// the data we need to render the page
+	export async function preload(page, session) {
+		// `this.fetch` is a wrapper around `fetch` that allows
+		// you to make credentialled requests on both
+		// server and client
+		const pool = await this.fetch(`api/pool.json`).then(res => res.json());
+
+		return { pool };
+	}
+</script>
+
 <script>
-	let connectedMiners = 0;
-	let hashrate = 0;
-	let blocksMined = 0;
+	export let pool;
+
+	function formatHashrate(hashrate) {
+		const kiloHash = hashrate / 1000;
+		return Math.round(kiloHash * 10) / 10;
+	}
 </script>
