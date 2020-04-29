@@ -2,40 +2,39 @@
 	<title>Dashboard - NIMIQ.WATCH Pool</title>
 </svelte:head>
 
-<h1>Dashboard</h1>
+<section class="flex flex-row justify-start mt-2">
+	<div class="bg-blue-900 px-4 py-3 rounded shadow mr-4 flex-grow">
+		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Your Hashrate</label>
+		<span class="text-2xl whitespace-no-wrap">{ formatHashrate(hashrate) } <span class="text-lg">kH/s</span></span>
+	</div>
+	<div class="bg-teal-900 px-4 py-3 rounded shadow sm:mr-4 flex-grow">
+		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Confirmed Balance</label>
+		<span class="text-2xl">{ balance.confirmed / 1e5 } <span class="text-lg">NIM</span></span>
+	</div>
+	<div class="bg-green-900 px-4 py-3 rounded shadow flex-grow hidden sm:block">
+		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Online Devices</label>
+		<span class="text-2xl">{ device_count }</span>
+	</div>
+</section>
 
-<p>
-	Your address: <strong>{ user.address }</strong>
-</p>
+<h2 class="text-xl font-semibold mt-8 mb-4 text-gray-500">Your Devices</h2>
 
-<p>
-	Confirmed Balance: <strong>{ balance.confirmed / 1e5 } NIM</strong>
-</p>
-
-<table border="1">
-	<thead>
-		<tr>
-			<th>Device ID</th>
-			<th>Last Block</th>
-			<th>Hashrate</th>
-			<th>Status</th>
-		</tr>
-	</thead>
-	<tbody>
-		{#each devices as device}
-			<tr>
-				<td>{ device.id }</td>
-				<td>#{ device.last_block }</td>
-				<td>{ formatHashrate(device.hashrate) } kH/s</td>
-				{#if isOnline(device.chain_height, device.last_block)}
-					<td class="online">online</td>
-				{:else}
-					<td class="offline">offline</td>
-				{/if}
-			</tr>
-		{/each}
-	</tbody>
-</table>
+{#each devices as device}
+	<div class="bg-gray-800 px-4 py-2 rounded shadow mb-2 flex flex-row justify-between items-center">
+		<div class="flex flex-row items-center mr-2">
+			<div class="{`w-8 h-8 rounded bg-gray-900 mr-4 flex-shrink-0${isOnline(device.chain_height, device.last_block) ? ' bg-green-600' : ' opacity-50'}`}"></div>
+			<div class="truncate">
+				<span class="">{ device.id }</span>
+				<small class="block text-gray-500">Last work for #{ device.last_block }</small>
+			</div>
+		</div>
+		{#if isOnline(device.chain_height, device.last_block)}
+			<div class="text-gray-500 tabular-nums font-bold">{ formatHashrate(device.hashrate) } kH/s</div>
+		{:else}
+			<div class="text-red-600 font-bold">offline</div>
+		{/if}
+	</div>
+{/each}
 
 <script context="module">
 	// the (optional) preload function takes a
@@ -55,24 +54,27 @@
 			this.error(user.error.code, user.error.message);
 			return;
 		}
-		if (!user.id) return { user, devices: [], balance: { confirmed: 0, unconfirmed: 0 } };
+		if (!user.id) return { devices: [], balance: { confirmed: 0, unconfirmed: 0 } };
 
 		const [devices, balance] = await Promise.all([
 			this.fetch(`api/user/${user.id}/devices.json`).then(res => res.json()),
 			this.fetch(`api/user/${user.id}/balance.json`).then(res => res.json()),
 		]);
-		return { user, devices, balance };
+		return { devices, balance };
 	}
 </script>
 
 <script>
-	export let user;
 	export let devices;
 	export let balance;
 
+	$: hashrate = devices.reduce((sum, device) => sum + (isOnline(device.chain_height, device.last_block) ? device.hashrate : 0), 0);
+	$: device_count = devices.filter(device => isOnline(device.chain_height, device.last_block)).length;
+
 	function formatHashrate(hashrate) {
 		const kiloHash = hashrate / 1000;
-		return Math.round(kiloHash * 10) / 10;
+		const rounded = Math.round(kiloHash * 10) / 10;
+		return rounded.toFixed(1);
 	}
 
 	function isOnline(chain_height, last_block) {
@@ -81,11 +83,11 @@
 </script>
 
 <style>
-	.online {
-		color: green;
+	.opacity-40 {
+		opacity: .4;
 	}
 
-	.offline {
-		color: red;
+	.tabular-nums {
+		font-variant-numeric: lining-nums tabular-nums;
 	}
 </style>

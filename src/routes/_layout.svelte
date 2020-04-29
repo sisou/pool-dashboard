@@ -1,6 +1,6 @@
 <Nav {segment}/>
 
-<main>
+<main class="container mx-auto p-4">
 	<slot></slot>
 </main>
 
@@ -15,14 +15,3 @@
 		session.set({ address: localStorage.address });
 	}
 </script>
-
-<style>
-	main {
-		position: relative;
-		max-width: 56em;
-		background-color: white;
-		padding: 2em;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-</style>
