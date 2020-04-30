@@ -7,7 +7,7 @@
 <section class="flex flex-row flex-wrap justify-start mt-2">
 	<div class="bg-blue-900 px-4 py-3 rounded shadow mb-4 mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Your Hashrate</label>
-		<span class="text-2xl whitespace-no-wrap">{ formatHashrate(hashrate) } <span class="text-lg">kH/s</span></span>
+		<span class="text-2xl whitespace-no-wrap"><Hashrate hashrate="{hashrate}"/></span>
 	</div>
 	<div class="bg-teal-900 px-4 py-3 rounded shadow mb-4 sm:mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Confirmed Balance</label>
@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		{#if isOnline(device.chain_height, device.last_block)}
-			<div class="text-gray-500 tabular-nums font-bold text-right">{ formatHashrate(device.hashrate) } <small>kH/s</small></div>
+			<div class="text-gray-500 tabular-nums font-bold text-right"><Hashrate hashrate="{device.hashrate}"/></div>
 		{:else}
 			<div class="text-red-600 font-bold">offline</div>
 		{/if}
@@ -73,17 +73,13 @@
 </script>
 
 <script>
+	import Hashrate from '../../components/Hashrate.svelte';
+
 	export let devices;
 	export let balance;
 
 	$: hashrate = devices.reduce((sum, device) => sum + (isOnline(device.chain_height, device.last_block) ? device.hashrate : 0), 0);
 	$: device_count = devices.filter(device => isOnline(device.chain_height, device.last_block)).length;
-
-	function formatHashrate(hashrate) {
-		const kiloHash = hashrate / 1000;
-		const rounded = Math.round(kiloHash * 10) / 10;
-		return rounded.toFixed(1);
-	}
 
 	function isOnline(chain_height, last_block) {
 		return last_block >= chain_height - 2;

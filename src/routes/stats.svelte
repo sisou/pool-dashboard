@@ -7,7 +7,7 @@
 <section class="flex flex-row justify-start mt-2">
 	<div class="bg-blue-900 px-4 py-3 rounded shadow mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Hashrate</label>
-		<span class="text-2xl whitespace-no-wrap">{ formatHashrate(stats.hashrate) } <span class="text-lg">kH/s</span></span>
+		<span class="text-2xl whitespace-no-wrap"><Hashrate hashrate="{stats.hashrate}"/></span>
 	</div>
 	<div class="bg-teal-900 px-4 py-3 rounded shadow sm:mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Devices</label>
@@ -76,14 +76,10 @@
 </script>
 
 <script>
+	import Hashrate from '../components/Hashrate.svelte';
+
 	export let stats;
 	export let blocks;
-
-	function formatHashrate(hashrate) {
-		const kiloHash = hashrate / 1000;
-		const rounded = Math.round(kiloHash * 10) / 10;
-		return rounded.toFixed(1);
-	}
 
 	function formatDate(timestamp) {
 		const date = new Date(timestamp * 1000);
