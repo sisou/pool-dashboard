@@ -1,31 +1,15 @@
-import { db } from './_database';
-import { calculateHashrate } from './_helpers';
+import dotenv from 'dotenv'; dotenv.config();
 
-async function getPoolStats() {
-	const [rows] = await db.query(
-		'SELECT COUNT(DISTINCT device) AS device_count, COUNT(DISTINCT user) AS user_count, SUM(difficulty) AS difficulty, UNIX_TIMESTAMP() - MIN(block.datetime) AS duration FROM shares LEFT JOIN block ON prev_block = block.id',
-	);
-	return rows[0];
-}
-
-async function getPoolBlockCount() {
-	const [rows] = await db.query(
-		'SELECT COUNT(DISTINCT payin.block) AS block_count FROM payin INNER JOIN block ON block.id = payin.block WHERE block.main_chain = 1',
-	);
-	return rows[0].block_count;
-}
-
-export async function get(req, res, next) {
-	const [stats, block_count] = await Promise.all([
-		getPoolStats(),
-		getPoolBlockCount(),
-	]);
-
+export function get(req, res, next) {
 	res.setHeader('Content-Type', 'application/json');
 	res.end(JSON.stringify({
-		device_count: stats.device_count,
-		user_count: stats.user_count,
-		hashrate: calculateHashrate(stats.difficulty, stats.duration),
-		block_count,
+		name: process.env.POOL_NAME,
+		tagline: process.env.POOL_TAGLINE,
+		domain: process.env.POOL_DOMAIN,
+		port: process.env.POOL_PORT,
+		nim_address: process.env.POOL_NIM_ADDRESS,
+		fee: process.env.POOL_FEE,
+		confirmations: process.env.POOL_CONFIRMATIONS,
+		payout_frequency: process.env.POOL_PAYOUT_FREQUENCY,
 	}));
 }

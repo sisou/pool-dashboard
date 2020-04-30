@@ -1,6 +1,11 @@
 import { db } from '../_database';
 import Nimiq from '@nimiq/core';
 
+async function getUserId(base64Address) {
+	const [rows] = await db.query('SELECT id FROM user WHERE address = ?', [base64Address]);
+	return rows.length ? rows[0].id : null;
+}
+
 export async function get(req, res, next) {
 	const { address } = req.params;
 
@@ -18,8 +23,7 @@ export async function get(req, res, next) {
 		return;
 	}
 
-	const [rows] = await db.query('SELECT id FROM user WHERE address = ?', [nimiqAddress.toBase64()]);
-	const id = rows.length ? rows[0].id : null;
+	const id = await getUserId(nimiqAddress.toBase64());
 
 	res.setHeader('Content-Type', 'application/json');
 	res.end(JSON.stringify({

@@ -2,6 +2,8 @@
 	<title>Dashboard - NIMIQ.WATCH Pool</title>
 </svelte:head>
 
+<h1 class="text-3xl font-semibold mb-4">Dashboard</h1>
+
 <section class="flex flex-row justify-start mt-2">
 	<div class="bg-blue-900 px-4 py-3 rounded shadow mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Your Hashrate</label>
@@ -34,6 +36,10 @@
 			<div class="text-red-600 font-bold">offline</div>
 		{/if}
 	</div>
+{:else}
+	<p class="bg-orange-900 py-2 px-4 rounded inline-block text-sm uppercase tracking-wide font-bold text-orange-600">
+		No registered devices
+	</p>
 {/each}
 
 <script context="module">

@@ -2,18 +2,20 @@
 	<title>Stats - NIMIQ.WATCH Pool</title>
 </svelte:head>
 
+<h1 class="text-3xl font-semibold mb-4">Pool Stats</h1>
+
 <section class="flex flex-row justify-start mt-2">
 	<div class="bg-blue-900 px-4 py-3 rounded shadow mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Hashrate</label>
-		<span class="text-2xl whitespace-no-wrap">{ formatHashrate(pool.hashrate) } <span class="text-lg">kH/s</span></span>
+		<span class="text-2xl whitespace-no-wrap">{ formatHashrate(stats.hashrate) } <span class="text-lg">kH/s</span></span>
 	</div>
 	<div class="bg-teal-900 px-4 py-3 rounded shadow sm:mr-4 flex-grow">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Devices</label>
-		<span class="text-2xl">{ pool.device_count }</span>
+		<span class="text-2xl">{ stats.device_count }</span>
 	</div>
 	<div class="bg-green-900 px-4 py-3 rounded shadow mr-0 flex-grow hidden sm:block">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40">Users</label>
-		<span class="text-2xl">{ pool.user_count }</span>
+		<span class="text-2xl">{ stats.user_count }</span>
 	</div>
 </section>
 
@@ -53,17 +55,17 @@
 		// `this.fetch` is a wrapper around `fetch` that allows
 		// you to make credentialled requests on both
 		// server and client
-		const [pool, blocks] = await Promise.all([
-			this.fetch(`api/pool.json`).then(res => res.json()),
+		const [stats, blocks] = await Promise.all([
+			this.fetch(`api/stats.json`).then(res => res.json()),
 			this.fetch(`api/blocks.json`).then(res => res.json()),
 		]);
 
-		return { pool, blocks };
+		return { stats, blocks };
 	}
 </script>
 
 <script>
-	export let pool;
+	export let stats;
 	export let blocks;
 
 	function formatHashrate(hashrate) {
