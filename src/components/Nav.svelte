@@ -1,5 +1,5 @@
 <nav class="text-gray-500">
-	<ul>
+	<ul class="container">
 		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 		<li><a aria-current="{segment === 'stats' ? 'page' : undefined}" href="stats">Stats</a></li>
 		<li><a aria-current="{segment === 'dashboard' ? 'page' : undefined}" href="{dashboardHref}">Dashboard</a></li>
@@ -41,7 +41,7 @@
 	}
 
 	ul {
-		margin: 0;
+		margin: 0 auto;
 		padding: 0;
 	}
 

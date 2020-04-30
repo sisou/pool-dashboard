@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.container {
+    max-width: 1024px;
+}
+
+.opacity-40 {
+    opacity: .4;
+}
+
+.tabular-nums {
+    font-variant-numeric: lining-nums tabular-nums;
+}
+
+.align-sub {
+    vertical-align: sub;
+}

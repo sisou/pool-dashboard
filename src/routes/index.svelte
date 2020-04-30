@@ -8,7 +8,7 @@
 <div class="flex flex-row flex-wrap">
 	<div class="bg-gray-800 px-2 py-2 rounded shadow inline-block mr-2 mb-2">
 		<label class="block uppercase font-semibold text-xs tracking-wider text-white opacity-40 pl-2 mb-1">Connect to this Pool</label>
-		<p class="text-lg font-mono whitespace-no-wrap bg-gray-700 px-2 py-1 rounded-sm">{ pool.domain }:{ pool.port }</p>
+		<p class="text-lg font-mono whitespace-no-wrap bg-gray-700 px-2 pt-1 rounded-sm">{ pool.domain }:{ pool.port }</p>
 	</div>
 
 	<div class="bg-gray-800 px-4 py-2 rounded shadow inline-block mr-2 mb-2">
@@ -39,9 +39,3 @@
 <script>
 	export let pool;
 </script>
-
-<style>
-	.opacity-40 {
-		opacity: .4;
-	}
-</style>
