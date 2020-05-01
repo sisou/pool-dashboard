@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "pool-dashboard",
+  "description": "A Nimiq mining pool website with a stats page and dashboard for miners to check their hashrate and pool balance.",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
