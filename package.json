@@ -1,7 +1,7 @@
 {
   "name": "pool-dashboard",
   "description": "A Nimiq mining pool website with a stats page and dashboard for miners to check their hashrate and pool balance.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "dev": "sapper dev",
     "watch:tailwind": "postcss static/tailwind.css -o static/index.css -w",
