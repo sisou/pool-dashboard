@@ -8,7 +8,7 @@ async function getChainHeight() {
 
 async function getPoolBlocks() {
 	const [rows] = await db.query(
-		'SELECT DISTINCT payin.block AS id, hash, height, datetime, main_chain FROM payin LEFT JOIN block ON payin.block = block.id ORDER BY height DESC LIMIT 10;',
+		'SELECT DISTINCT payin.block AS id, hash, height, datetime, main_chain FROM payin LEFT JOIN block ON payin.block = block.id ORDER BY height DESC LIMIT 10',
 	);
 	return rows;
 }
