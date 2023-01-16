@@ -24,7 +24,7 @@ export async function get(req, res, next) {
 		timestamp: block.datetime,
 		hash: Nimiq.BufferUtils.toHex(block.hash),
 		main_chain: block.main_chain,
-		confirmations_remaining: Math.max(0, process.env.POOL_CONFIRMATIONS - (chainHeight - block.height)),
+		confirmations_remaining: Math.max(0, process.env.POOL_CONFIRMATIONS - (chainHeight - block.height + 1)),
 	}));
 
 	res.setHeader('Content-Type', 'application/json');
